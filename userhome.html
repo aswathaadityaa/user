@@ -132,6 +132,16 @@
   <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-database.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-auth.js"></script>
   <script>
+    var urlParams = new URLSearchParams(window.location.search);
+  var acceptedData = JSON.parse(decodeURIComponent(urlParams.get('acceptedData')));
+
+  // Display the accepted data on the user page
+  var acceptedDataElement = document.getElementById('acceptedData');
+  acceptedData.forEach(function(data) {
+    var dataElement = document.createElement('div');
+    dataElement.textContent = 'Name: ' + data.name + ', File: ' + data.file;
+    acceptedDataElement.appendChild(dataElement);
+  });
     // Get the query parameter value
     const params = new URLSearchParams(window.location.search);
     const displayName = params.get('displayName');
