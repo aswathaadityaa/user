@@ -176,7 +176,6 @@ var firebaseConfig = {
     var booksRef = database.ref('books');
     // Listen for changes in the data
 
-    
 // ...
 // ...
 
@@ -217,7 +216,6 @@ booksRef.on('value', function(snapshot) {
 function acceptDog(event) {
   var bookId = event.target.dataset.bookId;
 
-  
   // Update the accepted field of the corresponding book to true
   database.ref('books/' + bookId).update({
     accepted: true
