@@ -164,10 +164,7 @@ var firebaseConfig = {
     // Get a reference to the database service
     var database = firebase.database();
     var booksRef = database.ref('books');
-    // Listen for changes in the data
-    
-// ...
-// ...
+
 booksRef.on('value', function(snapshot) {
       var bookList = document.getElementById('bookname');
       bookList.innerHTML = '';
