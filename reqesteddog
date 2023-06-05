@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <!-- Add your CSS styles here -->
+</head>
+<body>
+    <div class="container">
+        <h2>Requested Dogs</h2>
+        <div id="dogRequests"></div>
+    </div>
+    
+    <script src="https://www.gstatic.com/firebasejs/8.4.2/firebase.js"></script>
+    <script>
+        // Initialize Firebase
+        var firebaseConfig = {
+            // Add your Firebase configuration here
+        };
+
+        firebase.initializeApp(firebaseConfig);
+
+        // Reference to the "dogrequest" collection
+        var dogRequestRef = firebase.firestore().collection("dogrequest");
+
+      db.collection("dogrequest")
+  .get()
+  .then((querySnapshot) => {
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      const bookname = data.bookname;
+      const mobilenumber = data.mobilenumber;
+      const userName = data.userName;
+
+      // Display the data
+      const requestDiv = document.createElement("div");
+      requestDiv.innerHTML = `
+        <h3>Book Name: ${bookname}</h3>
+        <p>Mobile Number: ${mobilenumber}</p>
+        <p>User Name: ${userName}</p>
+      `;
+      document.body.appendChild(requestDiv);
+    });
+  })
+  .catch((error) => {
+    console.log("Error getting dog requests: ", error);
+  });
+    </script>
+</body>
+</html>
