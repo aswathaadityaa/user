@@ -165,7 +165,8 @@ var firebaseConfig = {
     var database = firebase.database();
     var booksRef = database.ref('books');
 
-booksRef.on('value', function(snapshot) {
+
+  booksRef.on('value', function(snapshot) {
     var bookList = document.getElementById('bookname');
     bookList.innerHTML = '';
     snapshot.forEach(function(childSnapshot) {
@@ -197,23 +198,27 @@ booksRef.on('value', function(snapshot) {
         document.getElementById('nameInput').value = currentUser.displayName;
       }
     } else {
-
+      // ...
     }
   });
 
-    // Check if a user is already logged in
-    firebase.auth().onAuthStateChanged(function(user) {
-      if (user) {
-        // User is signed in
-        var currentUser = firebase.auth().currentUser;
-        if (currentUser && currentUser.displayName) {
-          // Set the display name in the comment form
-          document.getElementById('nameInput').value = currentUser.displayName;
-        }
-      } else {
-        // ...
+  // Function to handle the request for a dog
+  function requestDog() {
+    var currentUser = firebase.auth().currentUser;
+    if (currentUser) {
+      var mobileNumber = prompt('Please enter your mobile number:');
+      if (mobileNumber !== null) {
+        // Upload the mobile number and user name to Firebase
+        var dogRequestRef = database.ref('dogRequests');
+        var dogRequest = {
+          mobileNumber: mobileNumber,
+          userName: currentUser.displayName
+        };
+        dogRequestRef.push(dogRequest);
+        alert('Request sent successfully!');
       }
-    });
+    }
+  }
 
   </script>
 </body>
