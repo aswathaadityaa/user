@@ -33,11 +33,11 @@
       db.collection("dogRequests")
   .get()
   .then((querySnapshot) => {
-    querySnapshot.forEach((doc) => {
-      const data = doc.data();
-      const bookname = data.bookName;
-      const mobilenumber = data.mobileNumber;
-      const userName = data.userName;
+    querySnapshot.forEach((dogRequests) => {
+      
+      const bookname = dogRequests.bookName;
+      const mobilenumber = dogRequests.mobileNumber;
+      const userName = dogRequests.userName;
 
       // Display the data
       const requestDiv = document.createElement("div");
