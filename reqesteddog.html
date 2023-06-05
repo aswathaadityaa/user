@@ -30,7 +30,7 @@
         // Reference to the "dogrequest" collection
         var dogRequestRef = firebase.firestore().collection("dogRequest");
 
-      db.collection("dogRequest")
+      db.collection("dogRequests")
   .get()
   .then((querySnapshot) => {
     querySnapshot.forEach((doc) => {
