@@ -35,8 +35,8 @@
   .then((querySnapshot) => {
     querySnapshot.forEach((doc) => {
       const data = doc.data();
-      const bookname = data.bookname;
-      const mobilenumber = data.mobilenumber;
+      const bookname = data.bookName;
+      const mobilenumber = data.mobileNumber;
       const userName = data.userName;
 
       // Display the data
