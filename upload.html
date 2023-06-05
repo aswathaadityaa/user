@@ -175,9 +175,23 @@
     <script src="./connect.js"></script>
     <script src="./uppage.js"></script>
     <script>
-       // Initialize Firebase Storage
-var storage = firebase.storage();
-var storageRef = storage.ref();
+           var storage = firebase.storage();
+        var storageRef = storage.ref();
+
+        document.getElementById("insert").addEventListener("click", function() {
+            // Get the username from the URL parameter
+            var params = new URLSearchParams(window.location.search);
+            var userName = params.get('displayName');
+
+            // Get other form values as needed
+            var bookName = document.getElementById("bookname").value;
+
+            // Save the username and other form values to your database
+            // You can use Firestore or Realtime Database to store this information
+            // For simplicity, I'll just log the values here
+            console.log("Username:", userName);
+            console.log("Book Name:", bookName);
+        });
 
 document.getElementById("insert").addEventListener("click", function() {
   var file = document.getElementById("file-input").files[0];
