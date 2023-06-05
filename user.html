@@ -202,24 +202,26 @@ var firebaseConfig = {
     }
   });
 
-  // Function to handle the request for a dog
   function requestDog() {
-    var currentUser = firebase.auth().currentUser;
-    if (currentUser) {
-      var mobileNumber = prompt('Please enter your mobile number:');
-      if (mobileNumber !== null) {
-        // Upload the mobile number and user name to Firebase
+  var currentUser = firebase.auth().currentUser;
+  if (currentUser) {
+    var mobileNumber = prompt('Please enter your mobile number:');
+    if (mobileNumber !== null) {
+      var bookName = prompt('Please enter the book name:');
+      if (bookName !== null) {
+        // Upload the mobile number, user name, and book name to Firebase
         var dogRequestRef = database.ref('dogRequests');
         var dogRequest = {
           mobileNumber: mobileNumber,
-          userName: currentUser.displayName
+          userName: currentUser.displayName,
+          bookName: bookName
         };
         dogRequestRef.push(dogRequest);
         alert('Request sent successfully!');
       }
     }
   }
-
+}
   </script>
 </body>
 </html>
