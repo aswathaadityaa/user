@@ -132,13 +132,12 @@
     <h2 id="myprofile"></h2>
   </header>
  <main>
-  <section id="books">
-    <center>
-      <ul id="bookname"></ul>
-    </center>
-  </section>
-  <button class="request-button" onclick="requestDog()">Request a Dog</button>
-</main>
+    <section id="books">
+      <center>
+        <ul id="bookname"></ul>
+      </center>
+    </section>
+  </main>
  
   
   <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-app.js"></script>
@@ -166,62 +165,59 @@ var firebaseConfig = {
     var booksRef = database.ref('books');
 
 
-  booksRef.on('value', function(snapshot) {
-    var bookList = document.getElementById('bookname');
-    bookList.innerHTML = '';
-    snapshot.forEach(function(childSnapshot) {
-      var book = childSnapshot.val();
-      if (book.accepted) {
-        var bookBlock = document.createElement('li');
-        bookBlock.classList.add('book-block');
-        // ...
-        var titleHeading = document.createElement('h3');
-        titleHeading.innerHTML = `${book.bookname.toUpperCase()} (<span class="dog-gender">${book.gender}</span>)`;
-        bookBlock.appendChild(titleHeading);
-        var detailsParagraph = document.createElement('p');
-        detailsParagraph.innerHTML =
-          book.dogtype.toUpperCase() + '<br>' +
-          '<strong>About </strong> ' + book.desc ;
-        bookBlock.appendChild(detailsParagraph);
-        bookList.appendChild(bookBlock);
-      }
+booksRef.on('value', function(snapshot) {
+      var bookList = document.getElementById('bookname');
+      bookList.innerHTML = '';
+      snapshot.forEach(function(childSnapshot) {
+        var book = childSnapshot.val();
+        if (book.accepted) {
+          var bookBlock = document.createElement('li');
+          bookBlock.classList.add('book-block');
+          // ...
+
+          var titleHeading = document.createElement('h3');
+          titleHeading.innerHTML = `${book.bookname.toUpperCase()} (<span class="dog-gender">${book.gender}</span>)`;
+          bookBlock.appendChild(titleHeading);
+
+          var detailsParagraph = document.createElement('p');
+          detailsParagraph.innerHTML =
+            book.dogtype.toUpperCase() + '<br>' +
+            '<strong>About:</strong> ' + book.desc;
+          bookBlock.appendChild(detailsParagraph);
+
+          var requestButton = document.createElement('button');
+          requestButton.classList.add('request-button');
+          requestButton.innerText = 'Request';
+          requestButton.onclick = function() {
+            promptAndSendRequest(book.bookname);
+          };
+          bookBlock.appendChild(requestButton);
+
+          bookList.appendChild(bookBlock);
+        }
+      });
     });
-  });
 
-  // Check if a user is already logged in
-  firebase.auth().onAuthStateChanged(function(user) {
-    if (user) {
-      // User is signed in
+    function promptAndSendRequest(bookName) {
       var currentUser = firebase.auth().currentUser;
-      if (currentUser && currentUser.displayName) {
-        // Set the display name in the comment form
-        document.getElementById('nameInput').value = currentUser.displayName;
-      }
-    } else {
-      // ...
-    }
-  });
-
-  function requestDog() {
-  var currentUser = firebase.auth().currentUser;
-  if (currentUser) {
-    var mobileNumber = prompt('Please enter your mobile number:');
-    if (mobileNumber !== null) {
-      var bookName = prompt('Please enter the book name:');
-      if (bookName !== null) {
-        // Upload the mobile number, user name, and book name to Firebase
-        var dogRequestRef = database.ref('dogRequests');
-        var dogRequest = {
-          mobileNumber: mobileNumber,
-          userName: currentUser.displayName,
-          bookName: bookName
-        };
-        dogRequestRef.push(dogRequest);
-        alert('Request sent successfully!');
+      if (currentUser) {
+        var mobileNumber = prompt('Please enter your mobile number:');
+        if (mobileNumber !== null) {
+          var confirmRequest = confirm(`Are you sure you want to request the book "${bookName}"?`);
+          if (confirmRequest) {
+            // Upload the mobile number, user name, and book name to Firebase
+            var dogRequestRef = database.ref('dogRequests');
+            var dogRequest = {
+              mobileNumber: mobileNumber,
+              userName: currentUser.displayName,
+              bookName: bookName
+            };
+            dogRequestRef.push(dogRequest);
+            alert('Request sent successfully!');
+          }
+        }
       }
     }
-  }
-}
   </script>
 </body>
 </html>
