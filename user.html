@@ -135,7 +135,7 @@
     <section id="books">
       <center>
         <ul id="bookname"></ul>
-       <button class="request-button" onclick="requestDog()">Request a Dog</button>
+       
       </center>
     </section>
   </main>
@@ -214,23 +214,7 @@ booksRef.on('value', function(snapshot) {
         // ...
       }
     });
-      // Function to handle the request for a dog
-  function requestDog() {
-    var currentUser = firebase.auth().currentUser;
-    if (currentUser) {
-      var mobileNumber = prompt('Please enter your mobile number:');
-      if (mobileNumber !== null) {
-        // Upload the mobile number and user name to Firebase
-        var dogRequestRef = database.ref('dogRequests');
-        var dogRequest = {
-          mobileNumber: mobileNumber,
-          userName: currentUser.displayName
-        };
-        dogRequestRef.push(dogRequest);
-        alert('Request sent successfully!');
-      }
-    }
-  
+
   </script>
 </body>
 </html>
