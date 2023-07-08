@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>ADAPT YOUR PET</title>
   <style>
     /* Add custom CSS styles */
     body {
@@ -123,13 +123,29 @@
   border-radius: 4px;
   cursor: pointer;
 }
+    .floating-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  z-index: 9999; /* Ensure it appears above other elements */
+}
   </style>
 </head>
 <body>
   <header>
     <h1>ADOPT ME <img src="https://clipart-library.com/images/BigrG6d8T.png" style="width:55px;height:40px;margin-left:10px;"></h1>
 
-
+  <a href="petupload.html" class="floating-button">UPLOAD A PET</a>
     <h2 id="myprofile"></h2>
   </header>
  <main>
