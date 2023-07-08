@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ADAPT YOUR PET</title>
+  <title>Document</title>
   <style>
     /* Add custom CSS styles */
     body {
@@ -12,6 +12,9 @@
       margin: 0;
       padding: 0;
       background-color: #f2f2f2;
+    }
+    .book-block.hidden {
+      display: none;
     }
     .accept-button {
     background-color: #4CAF50;
@@ -123,31 +126,18 @@
   border-radius: 4px;
   cursor: pointer;
 }
-    .floating-button {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 14px;
-  border-radius: 4px;
-  cursor: pointer;
-  z-index: 9999; /* Ensure it appears above other elements */
-}
   </style>
 </head>
 <body>
   <header>
     <h1>ADOPT ME <img src="https://clipart-library.com/images/BigrG6d8T.png" style="width:55px;height:40px;margin-left:10px;"></h1>
 
-  <a href="petupload.html" class="floating-button">UPLOAD A PET</a>
+
     <h2 id="myprofile"></h2>
   </header>
+  <input type="text" id="searchInput" placeholder="Search..." />
+ <button onclick="search()">Search</button>
+
  <main>
     <section id="books">
       <center>
@@ -214,6 +204,45 @@ booksRef.on('value', function(snapshot) {
         }
       });
     });
+    function loadBooks(snapshot) {
+      var bookList = document.getElementById('bookname');
+      bookList.innerHTML = '';
+      snapshot.forEach(function(childSnapshot) {
+        var book = childSnapshot.val();
+        var bookBlock = document.createElement('li');
+        // ...
+    
+        // Apply the 'hidden' class to non-matching books
+        if (!book.bookname.toLowerCase().includes(searchInput)) {
+          bookBlock.classList.add('hidden');
+        }
+    
+        // ...
+      });
+    }
+
+    
+      // Attach the event listener to the 'value' event
+      booksRef.on('value', loadBooks);
+    
+      function search() {
+          var searchInput = document.getElementById('searchInput').value.trim().toLowerCase();
+          booksRef.off('value', loadBooks); // Remove the previous event listener temporarily
+        
+          booksRef.on('value', function(snapshot) {
+            var filteredBooks = snapshot.filter(function(childSnapshot) {
+              var book = childSnapshot.val();
+              // Perform case-insensitive search on the book name or any other desired field
+              return (
+                book.bookname.toLowerCase().includes(searchInput) ||
+                // Add more conditions for additional fields
+              );
+            });
+        
+            loadBooks(filteredBooks);
+          });
+        }
+
 
     function promptAndSendRequest(bookName) {
       var currentUser = firebase.auth().currentUser;
