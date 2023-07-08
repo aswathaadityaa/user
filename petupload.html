@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f1f1f1;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            filter: grayscale(100%);
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            filter: grayscale(100%);
+        }
+
+        .form {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #555;
+            filter: grayscale(100%);
+        }
+
+        input[type="text"],
+        select {
+            padding: 10px;
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            outline: none;
+            font-size: 16px;
+            color: #333;
+            filter: grayscale(100%);
+        }
+
+        select option[hidden] {
+            display: none;
+        }
+
+        .linkbuttons {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .linkbuttons a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #f1f1f1;
+            color: #333;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+            filter: grayscale(100%);
+        }
+
+        .linkbuttons a:hover {
+            background-color: #e4e4e4;
+            filter: grayscale(0%);
+        }
+
+        .buttons {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .buttons button {
+            padding: 10px 20px;
+            background-color: #4285f4;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            filter: grayscale(100%);
+        }
+
+        .buttons button:hover {
+            background-color: #357ae8;
+            filter: grayscale(0%);
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .container {
+                max-width: 90%;
+            }
+        }
+   
+      
+
+        #location {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f1f1f1;
+            color: #333;
+            font-size: 16px;
+            margin-top: 10px;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            hyphens: auto;
+        }
+    </style>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PET UPLOAD</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <div class="container">
+        <h2>Dog Info</h2>
+        
+        <br />
+        <div class="form">
+            <label for="bookname">Dog Breed</label>
+            <input type="text" name="bookname" id="bookname" /> <br /><br />
+           
+           <select name="dogtype" id="dogtype">
+                <option selected hidden>Select Dog type</option>
+                <option value="straydog">Stray Dog</option>
+                <option value="housedog">House Dog</option>
+            </select><br /><br />
+            
+            <select name="gender" id="gender">
+                <option selected hidden>Select Dog Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select><br /><br />
+
+            <label for="desc">About Dog condition</label>
+            <input type="text" name="Desc" id="desc" /> <br /><br />
+            
+            <h1>User Location</h1>
+    <button onclick="getLocation()">Get Location</button>
+           <div id="location"></div>
+            <h1>User upload images</h1>
+      <input type="file" accept="image/*" capture="environment" id="file-input"/>
+        <input type="hidden" name="latitude" id="latitude" />
+        <input type="hidden" name="longitude" id="longitude" />
+   <script>
+  const fileInput = document.getElementById('file-input');
+
+  fileInput.addEventListener('change', (e) =>
+    doSomethingWithFiles(e.target.files),
+  );
+</script>
+        <div class="buttons">
+            <button id="insert">Insert</button>
+        </div>
+      
+    <script src="https://www.gstatic.com/firebasejs/8.4.2/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.4.2/firebase-storage.js"></script>
+
+    <script src="./connect.js"></script>
+    <script src="./uppage.js"></script>
+    <script>
+       // Initialize Firebase Storage
+var storage = firebase.storage();
+var storageRef = storage.ref();
+
+document.getElementById("insert").addEventListener("click", function() {
+  var file = document.getElementById("file-input").files[0];
+  var bookName = document.getElementById("bookname").value;
+
+  // Create a storage reference with a unique filename
+  var fileName = file.name + "_" + new Date().getTime();
+  var fileRef = storageRef.child(fileName);
+
+  // Upload file to Firebase Storage
+  fileRef.put(file).then(function(snapshot) {
+    console.log("File uploaded successfully");
+
+    // Get the download URL of the uploaded file
+    fileRef.getDownloadURL().then(function(url) {
+      // Save the file URL and other information to your database
+      // You can use Firestore or Realtime Database to store this information
+      // For simplicity, I'll just log the URL here
+      console.log("File URL:", url);
+      console.log("Book Name:", bookName);
+    }).catch(function(error) {
+      console.log("Error getting download URL:", error);
+    });
+  }).catch(function(error) {
+    console.log("Error uploading file:", error);
+  });
+});
+
+       
+       
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition, showError);
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+
+        function showPosition(position) {
+            var latitude = position.coords.latitude;
+            var longitude = position.coords.longitude;
+            alert("Latitude: " + latitude + "\nLongitude: " + longitude);
+            // You can use the latitude and longitude values as per your requirements
+        }
+
+        function showError(error) {
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    alert("User denied the request for Geolocation.");
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    alert("Location information is unavailable.");
+                    break;
+                case error.TIMEOUT:
+                    alert("The request to get user location timed out.");
+                    break;
+                case error.UNKNOWN_ERROR:
+                    alert("An unknown error occurred.");
+                    break;
+            }
+        }
+        function showPosition(position) {
+            var latitude = position.coords.latitude;
+            var longitude = position.coords.longitude;
+            var locationElement = document.getElementById("location");
+            locationElement.textContent = "Latitude: " + latitude + "\nLongitude: " + longitude;
+
+            // Set the latitude and longitude values in the hidden input fields
+            document.getElementById("latitude").value = latitude;
+            document.getElementById("longitude").value = longitude;
+        }
+
+    </script>
+</body>
+</html>
