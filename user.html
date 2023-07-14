@@ -45,7 +45,6 @@
     .search-button:hover {
       background-color: #45a049;
     }
-
     .accept-button {
     background-color: #4CAF50;
     color: white;
@@ -172,21 +171,21 @@
   cursor: pointer;
   z-index: 9999; /* Ensure it appears above other elements */
 }
-
   </style>
 </head>
 <body>
   <header>
     <h1>ADOPT ME <img src="https://clipart-library.com/images/BigrG6d8T.png" style="width:55px;height:40px;margin-left:10px;"></h1>
 <a href="petupload.html" class="floating-button">UPLOAD A PET</a>
-
     <h2 id="myprofile"></h2>
   </header>
+  
+
   <div class="search-bar">
   <input type="text" id="searchInput" class="search-input" placeholder="Search..." />
   <button onclick="search()" class="search-button">Search</button>
 </div>
-
+<section id="searchResults"></section>
  <main>
     <section id="books">
       <center>
@@ -218,58 +217,86 @@ var firebaseConfig = {
       measurementId: "G-CQ9CENNL89"
     };
     firebase.initializeApp(firebaseConfig);
-    // Get a reference to the database service
-    var database = firebase.database();
-    var booksRef = database.ref('books');
+
+var database = firebase.database();
+var booksRef = database.ref('books');
+var allBooks = [];
+
 booksRef.on('value', function(snapshot) {
-      var bookList = document.getElementById('bookname');
-      bookList.innerHTML = '';
-      snapshot.forEach(function(childSnapshot) {
-        var book = childSnapshot.val();
-        if (book.accepted) {
-          var bookBlock = document.createElement('li');
-          bookBlock.classList.add('book-block');
-          // ...
-          var titleHeading = document.createElement('h3');
-          titleHeading.innerHTML = `${book.bookname.toUpperCase()} (<span class="dog-gender">${book.gender}</span>)`;
-          bookBlock.appendChild(titleHeading);
-          var detailsParagraph = document.createElement('p');
-          detailsParagraph.innerHTML =
-            book.dogtype.toUpperCase() + '<br>' +
-            '<strong>About:</strong> ' + book.desc;
-          bookBlock.appendChild(detailsParagraph);
-          var requestButton = document.createElement('button');
-          requestButton.classList.add('request-button');
-          requestButton.innerText = 'Request';
-          requestButton.onclick = function() {
-            promptAndSendRequest(book.bookname);
-          };
-          bookBlock.appendChild(requestButton);
-          bookList.appendChild(bookBlock);
-        }
-      });
+  allBooks = [];
+  snapshot.forEach(function(childSnapshot) {
+    var book = childSnapshot.val();
+    if (book.accepted) {
+      allBooks.push(book);
+    }
+  });
+
+  displayBooks(allBooks);
+});
+
+function search() {
+  var searchInput = document.getElementById("searchInput").value.toLowerCase();
+  var searchResults = allBooks.filter(function(book) {
+    return book.bookname.toLowerCase().includes(searchInput);
+  });
+
+  displayBooks(searchResults);
+}
+
+function displayBooks(books) {
+  var bookList = document.getElementById('bookname');
+  bookList.innerHTML = '';
+
+  if (books.length === 0) {
+    var noResultsMessage = document.createElement('p');
+    noResultsMessage.innerHTML = 'No results found.';
+    bookList.appendChild(noResultsMessage);
+  } else {
+    books.forEach(function(book) {
+      var bookBlock = document.createElement('li');
+      bookBlock.classList.add('book-block');
+      // ...
+      
+      var titleHeading = document.createElement('h3');
+      titleHeading.innerHTML = `${book.bookname.toUpperCase()} (<span class="dog-gender">${book.gender}</span>)`;
+      bookBlock.appendChild(titleHeading);
+      var detailsParagraph = document.createElement('p');
+      detailsParagraph.innerHTML =
+        book.dogtype.toUpperCase() + '<br>' +
+        '<strong>About:</strong> ' + book.desc;
+      bookBlock.appendChild(detailsParagraph);
+      var requestButton = document.createElement('button');
+      requestButton.classList.add('request-button');
+      requestButton.innerText = 'Request';
+      requestButton.onclick = function() {
+        promptAndSendRequest(book.bookname);
+      };
+      bookBlock.appendChild(requestButton);
+      bookList.appendChild(bookBlock);
     });
-    function promptAndSendRequest(bookName) {
-      var currentUser = firebase.auth().currentUser;
-      if (currentUser) {
-        var mobileNumber = prompt('Please enter your mobile number:');
-        if (mobileNumber !== null) {
-          var confirmRequest = confirm(`Are you sure you want to request the book "${bookName}"?`);
-          if (confirmRequest) {
-            // Upload the mobile number, user name, and book name to Firebase
-            var dogRequestRef = database.ref('dogRequests');
-            var dogRequest = {
-              mobileNumber: mobileNumber,
-              userName: currentUser.displayName,
-              bookName: bookName
-            };
-            dogRequestRef.push(dogRequest);
-            alert('Request sent successfully!');
-          }
-        }
+  }
+}
+
+function promptAndSendRequest(bookName) {
+  var currentUser = firebase.auth().currentUser;
+  if (currentUser) {
+    var mobileNumber = prompt('Please enter your mobile number:');
+    if (mobileNumber !== null) {
+      var confirmRequest = confirm(`Are you sure you want to request the book "${bookName}"?`);
+      if (confirmRequest) {
+        // Upload the mobile number, user name, and book name to Firebase
+        var dogRequestRef = database.ref('dogRequests');
+        var dogRequest = {
+          mobileNumber: mobileNumber,
+          userName: currentUser.displayName,
+          bookName: bookName
+        };
+        dogRequestRef.push(dogRequest);
+        alert('Request sent successfully!');
       }
     }
+  }
+}
   </script>
-
 </body>
 </html>
