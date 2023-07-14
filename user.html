@@ -2,6 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MAKE A PET YOURS</title>
@@ -18,17 +21,19 @@
     }
     /* Search bar styling */
     .search-bar {
+      margin-top: 2%;
       display: flex;
       align-items: center;
+      
     }
     
     .search-input {
       padding: 10px;
-      border: none;
+      border: black;
       border-radius: 5px 0 0 5px;
       font-size: 16px;
       width: 300px;
-      background-color: #f2f2f2;
+      background-color: #ffffff;
       color: #333;
     }
     
@@ -41,6 +46,7 @@
       font-size: 16px;
       cursor: pointer;
     }
+
     
     .search-button:hover {
       background-color: #45a049;
@@ -58,6 +64,9 @@
     cursor: pointer;
     margin-top: 10px; /* Add any other desired margin */
   }
+  .about-dog{
+    font-family: Gentium Basic;
+  }
     header {
       background-color: #333;
       padding: 20px;
@@ -71,6 +80,7 @@
       margin: 0;
       
     }
+
     nav ul {
       list-style-type: none;
       margin: 0;
@@ -94,6 +104,16 @@
       font-size: 60%;
       text-align: end;
     }
+    .request-button{
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px 5px 5px 5px;
+      background-color: #4CAF50;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      font-family: Gentium Basic;
+    }
     #bookname {
       list-style-type: none;
       padding: 0;
@@ -112,6 +132,8 @@
       border-radius: 8px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       margin-bottom: 20px;
+      font-family: poppins , ;
+      letter-spacing: 1px;
     }
     .book-image {
       width: 200px;
@@ -261,6 +283,7 @@ function displayBooks(books) {
       titleHeading.innerHTML = `${book.bookname.toUpperCase()} (<span class="dog-gender">${book.gender}</span>)`;
       bookBlock.appendChild(titleHeading);
       var detailsParagraph = document.createElement('p');
+      detailsParagraph.classList.add('about-dog');
       detailsParagraph.innerHTML =
         book.dogtype.toUpperCase() + '<br>' +
         '<strong>About:</strong> ' + book.desc;
