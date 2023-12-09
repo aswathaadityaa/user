@@ -133,37 +133,24 @@
         
         <br />
         <div class="form">
-            <label for="bookname">Dog Breed</label>
+            <label for="bookname">Book name</label>
             <input type="text" name="bookname" id="bookname" /> <br /><br />
            
            <select name="dogtype" id="dogtype">
-                <option selected hidden>Select Dog type</option>
-                <option value="straydog">Stray Dog</option>
-                <option value="housedog">House Dog</option>
+                <option selected hidden>Select Book Type</option>
+                <option value="fiction">Fiction</option>
+                <option value="non-fiction">Non-Fiction</option>
+                <option value="fantasy">Fantasy</option>
+                <option value="mystery">Mystery</option>
             </select><br /><br />
             
-            <select name="gender" id="gender">
-                <option selected hidden>Select Dog Gender</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-            </select><br /><br />
+            <label for="authorname">Author name</label>
+             <input type="text" name="gender" id="gender" />
 
             <label for="desc">About Dog condition</label>
             <input type="text" name="Desc" id="desc" /> <br /><br />
             
-            <h1>User Location</h1>
-    <button onclick="getLocation()">Get Location</button>
-           <div id="location"></div>
-            <h1>User upload images</h1>
-      <input type="file" accept="image/*" capture="environment" id="file-input"/>
-        <input type="hidden" name="latitude" id="latitude" />
-        <input type="hidden" name="longitude" id="longitude" />
-   <script>
-  const fileInput = document.getElementById('file-input');
-
-  fileInput.addEventListener('change', (e) =>
-    doSomethingWithFiles(e.target.files),
-  );
+            
 </script>
         <div class="buttons">
             <button id="insert">Insert</button>
@@ -207,47 +194,7 @@ document.getElementById("insert").addEventListener("click", function() {
 });
 
        
-       
-        function getLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(showPosition, showError);
-            } else {
-                alert("Geolocation is not supported by this browser.");
-            }
-        }
-
-        function showPosition(position) {
-            var latitude = position.coords.latitude;
-            var longitude = position.coords.longitude;
-            alert("Latitude: " + latitude + "\nLongitude: " + longitude);
-            // You can use the latitude and longitude values as per your requirements
-        }
-
-        function showError(error) {
-            switch(error.code) {
-                case error.PERMISSION_DENIED:
-                    alert("User denied the request for Geolocation.");
-                    break;
-                case error.POSITION_UNAVAILABLE:
-                    alert("Location information is unavailable.");
-                    break;
-                case error.TIMEOUT:
-                    alert("The request to get user location timed out.");
-                    break;
-                case error.UNKNOWN_ERROR:
-                    alert("An unknown error occurred.");
-                    break;
-            }
-        }
-        function showPosition(position) {
-            var latitude = position.coords.latitude;
-            var longitude = position.coords.longitude;
-            var locationElement = document.getElementById("location");
-            locationElement.textContent = "Latitude: " + latitude + "\nLongitude: " + longitude;
-
-            // Set the latitude and longitude values in the hidden input fields
-            document.getElementById("latitude").value = latitude;
-            document.getElementById("longitude").value = longitude;
+    
         }
 
     </script>
